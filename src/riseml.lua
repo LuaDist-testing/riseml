@@ -1,6 +1,7 @@
 local turbo = require 'turbo'
 require 'torch'
 local cjson = require 'cjson'
+require 'os'
 
 turbo.log.categories.success = true
 turbo.log.categories.notice = true
@@ -27,14 +28,14 @@ function riseml.serve(predict_function)
     self:add_header('Access-Control-Allow-Origin', '*')
   end
 
-  print('webserver running...')
+  local port = tonumber(os.getenv("PORT"))
+  print('webserver running on port ' .. port)
   -- Create an Application object and bind our PredictHandler to the route '/predict'.
   local app = turbo.web.Application:new({
       {"/predict", PredictHandler}
   })
-
   -- Set the server to listen on port 80 and start the ioloop.
-  app:listen(80)
+  app:listen(port)
   turbo.ioloop.instance():start()
 end
 
@@ -59,11 +60,16 @@ function riseml.serve_rectangles(predict_function)
     self:add_header('Access-Control-Allow-Origin', '*')
   end
 
-  print('webserver running...')
+  local port = tonumber(os.getenv("PORT"))
+  print('webserver running on port ' .. port)
   -- Create an Application object and bind our PredictHandler to the route '/predict'.
   local app = turbo.web.Application:new({
       {"/predict", PredictHandler}
   })
+  -- Set the server to listen on port 80 and start the ioloop.
+  app:listen(port)
+  turbo.ioloop.instance():start()
+end
 
 function riseml.serve_it_t(predict_function)
   local PredictHandler = class("Predict", turbo.web.RequestHandler)
@@ -86,18 +92,13 @@ function riseml.serve_it_t(predict_function)
     self:add_header('Access-Control-Allow-Origin', '*')
   end
 
-  print('webserver running...')
+  local port = tonumber(os.getenv("PORT"))
+  print('webserver running on port ' .. port)
   -- Create an Application object and bind our PredictHandler to the route '/predict'.
   local app = turbo.web.Application:new({
       {"/predict", PredictHandler}
   })
-
   -- Set the server to listen on port 80 and start the ioloop.
-  app:listen(80)
-  turbo.ioloop.instance():start()
-end
-
-  -- Set the server to listen on port 80 and start the ioloop.
-  app:listen(80)
+  app:listen(port)
   turbo.ioloop.instance():start()
 end
